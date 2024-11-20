@@ -1,6 +1,6 @@
 .header {
-  background-color: var(--color-primary-dark);
-  color: white;
+  background-color: var(--primary-color);
+  color: var(--primary-color-text);
 }
 
 .nav-link {
@@ -8,5 +8,5 @@
 }
 
 .nav-link:hover {
-  color: var(--color-background);
+  opacity: 0.8;
 }

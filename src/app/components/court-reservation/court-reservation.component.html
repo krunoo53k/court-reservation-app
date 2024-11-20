@@ -13,9 +13,8 @@
             [label]="court.name"
             [disabled]="!court.isVacant"
             (onClick)="reserveCourt(slot.time, court)"
-            [styleClass]="
-              'w-32 court-button ' + (court.isVacant ? 'vacant' : 'occupied')
-            "
+            [severity]="court.isVacant ? 'success' : 'danger'"
+            [styleClass]="'w-32'"
           >
           </p-button>
         </div>

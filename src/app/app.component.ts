@@ -6,14 +6,8 @@ import { HeaderComponent } from "./components/header/header.component";
   selector: "app-root",
   standalone: true,
   imports: [RouterOutlet, HeaderComponent],
-  template: `
-    <div class="min-h-screen bg-[#F2E8CF]">
-      <app-header></app-header>
-      <main>
-        <router-outlet />
-      </main>
-    </div>
-  `,
+  templateUrl: "./app.component.html",
+  styleUrls: ["./app.component.css"],
 })
 export class AppComponent {
   title = "klasije";
