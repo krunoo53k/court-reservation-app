@@ -7,27 +7,36 @@ import { TimeSlot, Court } from "../models/court.model";
   providedIn: "root",
 })
 export class CourtService {
-  // Simulated data - replace with actual API calls
-  private mockTimeSlots: TimeSlot[] = [
-    {
-      time: "9:00 AM",
-      courts: [
-        { id: 1, name: "Court 1", isVacant: true },
-        { id: 2, name: "Court 2", isVacant: false },
-        { id: 3, name: "Court 3", isVacant: true },
-      ],
-    },
-    {
-      time: "10:00 AM",
-      courts: [
-        { id: 1, name: "Court 1", isVacant: false },
-        { id: 2, name: "Court 2", isVacant: true },
-        { id: 3, name: "Court 3", isVacant: true },
-      ],
-    },
-  ];
+  private mockTimeSlots: TimeSlot[] = this.generateTimeSlots();
 
   constructor(private http: HttpClient) {}
+
+  private generateTimeSlots(): TimeSlot[] {
+    const timeSlots: TimeSlot[] = [];
+    const numberOfCourts = 3;
+
+    for (let hour = 9; hour <= 21; hour++) {
+      const time =
+        hour < 12 ? `${hour}:00 AM` : `${hour === 12 ? 12 : hour - 12}:00 PM`;
+
+      const courts: Court[] = [];
+
+      for (let courtNum = 1; courtNum <= numberOfCourts; courtNum++) {
+        courts.push({
+          id: courtNum,
+          name: `Court ${courtNum}`,
+          isVacant: Math.random() < 0.5,
+        });
+      }
+
+      timeSlots.push({
+        time,
+        courts,
+      });
+    }
+
+    return timeSlots;
+  }
 
   getTimeSlots(): Observable<TimeSlot[]> {
     return of(this.mockTimeSlots);
