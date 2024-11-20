@@ -1,7 +1,14 @@
-/* PrimeNG CSS */
 @import "primeng/resources/themes/lara-light-blue/theme.css";
 @import "primeng/resources/primeng.css";
 @import "primeicons/primeicons.css";
+
+:root {
+  --color-primary-dark: #386641;
+  --color-primary: #6a994e;
+  --color-primary-light: #a7c957;
+  --color-background: #f2e8cf;
+  --color-accent: #bc4749;
+}
 
 @tailwind base;
 @tailwind components;
