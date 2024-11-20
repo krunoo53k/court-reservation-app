@@ -1,0 +1,12 @@
+.header {
+  background-color: var(--color-primary-dark);
+  color: white;
+}
+
+.nav-link {
+  transition: color 0.2s;
+}
+
+.nav-link:hover {
+  color: var(--color-background);
+}
