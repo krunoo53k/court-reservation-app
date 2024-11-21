@@ -5,6 +5,17 @@
       <div class="space-x-4">
         <a routerLink="/" class="nav-link">Home</a>
         <a routerLink="/courts" class="nav-link">Courts</a>
+        <ng-container *ngIf="authService.currentUser$ | async as user">
+          <span class="mr-4">Welcome, {{ user.username }}</span>
+          <p-button
+            label="Logout"
+            (onClick)="logout()"
+            severity="secondary"
+          ></p-button>
+        </ng-container>
+        <ng-container *ngIf="!(authService.currentUser$ | async)">
+          <a routerLink="/login" class="nav-link">Login</a>
+        </ng-container>
       </div>
     </div>
   </nav>
