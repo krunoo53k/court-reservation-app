@@ -3,10 +3,19 @@
   color: var(--primary-color-text);
 }
 
-.nav-link {
-  transition: color 0.2s;
+:host ::ng-deep .p-button.p-button-text {
+  color: var(--primary-color-text);
 }
 
-.nav-link:hover {
-  opacity: 0.8;
+:host ::ng-deep .p-button.p-button-text:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+:host ::ng-deep .p-button.p-button-outlined {
+  color: var(--primary-color-text);
+  border-color: var(--primary-color-text);
+}
+
+:host ::ng-deep .p-button.p-button-outlined:hover {
+  background: rgba(255, 255, 255, 0.1);
 }

@@ -1,19 +1,40 @@
 <header class="header fixed top-0 left-0 right-0 z-50 shadow-md">
-  <div class="flex items-center justify-between py-4 px-8">
+  <div class="flex items-center justify-between py-3 px-8">
     <div class="text-xl font-bold">Klasije</div>
-    <div class="space-x-4">
-      <a routerLink="/" class="nav-link">Home</a>
-      <a routerLink="/courts" class="nav-link">Courts</a>
+    <div class="flex items-center gap-4">
+      <p-button
+        label="Home"
+        [link]="true"
+        severity="secondary"
+        [text]="true"
+        routerLink="/"
+      ></p-button>
+      <p-button
+        label="Courts"
+        [link]="true"
+        severity="secondary"
+        [text]="true"
+        routerLink="/courts"
+      ></p-button>
+
       <ng-container *ngIf="authService.currentUser$ | async as user">
-        <span class="mr-4">Welcome, {{ user.username }}</span>
+        <span class="text-white">Welcome, {{ user.username }}</span>
         <p-button
           label="Logout"
           (onClick)="logout()"
           severity="secondary"
+          [outlined]="true"
         ></p-button>
       </ng-container>
+
       <ng-container *ngIf="!(authService.currentUser$ | async)">
-        <a routerLink="/login" class="nav-link">Login</a>
+        <p-button
+          label="Login"
+          [link]="true"
+          severity="secondary"
+          [outlined]="true"
+          routerLink="/login"
+        ></p-button>
       </ng-container>
     </div>
   </div>
