@@ -9,14 +9,14 @@
       <h2 class="time-label text-lg font-semibold mb-3">{{ slot.time }}</h2>
 
       <div class="flex gap-3">
-        <div *ngFor="let court of slot.courts">
+        <div *ngFor="let court of slot.courts" class="min-w-[140px] h-[40px]">
           <p-button
             *ngIf="!isUsersCourt(slot.time, court)"
             [label]="court.name"
             [disabled]="!court.isVacant"
             (onClick)="reserveCourt(slot.time, court)"
             [severity]="court.isVacant ? 'success' : 'danger'"
-            [styleClass]="'w-32'"
+            [styleClass]="'w-full h-full'"
           >
           </p-button>
           <p-button
@@ -24,7 +24,7 @@
             [label]="'Vacate ' + court.name"
             (onClick)="vacateCourt(slot.time, court)"
             severity="warning"
-            [styleClass]="'w-32'"
+            [styleClass]="'w-full h-full'"
           >
           </p-button>
         </div>
