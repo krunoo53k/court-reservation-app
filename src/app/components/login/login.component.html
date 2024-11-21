@@ -1,8 +1,8 @@
 <p-toast></p-toast>
 <div class="flex justify-center items-center min-h-[80vh]">
   <p-card header="Login" [style]="{ width: '360px' }">
-    <div class="flex flex-column gap-4">
-      <div class="flex flex-column gap-2">
+    <div class="flex flex-col gap-4 w-full">
+      <div class="flex flex-col gap-2 w-full">
         <label for="username">Username</label>
         <input
           id="username"
@@ -10,9 +10,10 @@
           pInputText
           [(ngModel)]="username"
           placeholder="Username"
+          class="w-full"
         />
       </div>
-      <div class="flex flex-column gap-2">
+      <div class="flex flex-col gap-2 w-full">
         <label for="password">Password</label>
         <input
           id="password"
@@ -20,12 +21,14 @@
           pInputText
           [(ngModel)]="password"
           placeholder="Password"
+          class="w-full"
         />
       </div>
       <p-button
         label="Login"
         (onClick)="onLogin()"
         [loading]="loading"
+        styleClass="w-full"
       ></p-button>
     </div>
   </p-card>
