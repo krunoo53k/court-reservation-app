@@ -5,4 +5,7 @@ module.exports = {
     extend: {},
   },
   plugins: [],
+  corePlugins: {
+    preflight: false, // This will prevent Tailwind from resetting button styles
+  },
 };
