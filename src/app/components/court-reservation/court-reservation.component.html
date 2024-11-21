@@ -11,10 +11,19 @@
       <div class="flex gap-3">
         <div *ngFor="let court of slot.courts">
           <p-button
+            *ngIf="!isUsersCourt(slot.time, court)"
             [label]="court.name"
             [disabled]="!court.isVacant"
             (onClick)="reserveCourt(slot.time, court)"
             [severity]="court.isVacant ? 'success' : 'danger'"
+            [styleClass]="'w-32'"
+          >
+          </p-button>
+          <p-button
+            *ngIf="isUsersCourt(slot.time, court)"
+            [label]="'Vacate ' + court.name"
+            (onClick)="vacateCourt(slot.time, court)"
+            severity="warning"
             [styleClass]="'w-32'"
           >
           </p-button>
