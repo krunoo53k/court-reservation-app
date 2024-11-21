@@ -1,0 +1,8 @@
+:host {
+  display: block;
+}
+
+.login-card {
+  max-width: 400px;
+  margin: 0 auto;
+}
