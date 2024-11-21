@@ -18,7 +18,7 @@ export class CourtService {
 
   private generateTimeSlots(): TimeSlot[] {
     const timeSlots: TimeSlot[] = [];
-    const numberOfCourts = 3;
+    const numberOfCourts = Math.floor(Math.random() * (12 - 4 + 1)) + 4; // Generates a random number between 4 and 12
 
     for (let hour = 9; hour <= 21; hour++) {
       const time =
