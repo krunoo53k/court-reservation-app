@@ -5,11 +5,14 @@
   </div>
 
   <div class="grid gap-4">
-    <div *ngFor="let slot of timeSlots" class="time-slot drop-shadow-md">
+    <div
+      *ngFor="let slot of timeSlots"
+      class="time-slot border-l-4 p-4 rounded-lg drop-shadow-md mb-4"
+    >
       <h2 class="time-label text-lg font-semibold mb-3">{{ slot.time }}</h2>
 
-      <div class="flex gap-3">
-        <div *ngFor="let court of slot.courts" class="min-w-[140px] h-[40px]">
+      <div class="flex flex-wrap gap-3">
+        <div *ngFor="let court of slot.courts" class="w-[140px] h-[40px]">
           <p-button
             *ngIf="!isUsersCourt(slot.time, court)"
             [label]="court.name"
