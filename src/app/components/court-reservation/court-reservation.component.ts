@@ -6,17 +6,19 @@ import { MessageService } from "primeng/api";
 import { CourtService } from "../../services/court.service";
 import { TimeSlot, Court } from "../../models/court.model";
 import { AuthService } from "../../services/auth.service";
+import { CalendarComponent } from "../calendar/calendar.component";
 
 @Component({
   selector: "app-court-reservation",
   standalone: true,
-  imports: [CommonModule, ButtonModule, ToastModule], // Add ToastModule
+  imports: [CommonModule, ButtonModule, ToastModule, CalendarComponent],
   templateUrl: "./court-reservation.component.html",
   styleUrls: ["./court-reservation.component.css"],
-  providers: [MessageService], // Add MessageService to providers
+  providers: [MessageService],
 })
 export class CourtReservationComponent implements OnInit {
   timeSlots: TimeSlot[] = [];
+  selectedDate: Date = new Date();
 
   constructor(
     private courtService: CourtService,
@@ -25,11 +27,16 @@ export class CourtReservationComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.loadTimeSlots();
+    this.loadTimeSlots(this.selectedDate);
   }
 
-  loadTimeSlots() {
-    this.courtService.getTimeSlots().subscribe((slots) => {
+  onDateChange(date: Date) {
+    this.selectedDate = date;
+    this.loadTimeSlots(date);
+  }
+
+  loadTimeSlots(date: Date) {
+    this.courtService.getTimeSlots(date).subscribe((slots) => {
       this.timeSlots = slots;
     });
   }
@@ -46,52 +53,60 @@ export class CourtReservationComponent implements OnInit {
         return;
       }
 
-      this.courtService.reserveCourt(timeSlot, court.id).subscribe({
-        next: (success) => {
-          if (success) {
-            court.isVacant = false;
-            this.messageService.add({
-              severity: "success",
-              summary: "Reservation Successful",
-              detail: `${court.name} reserved for ${timeSlot}`,
-            });
-          } else {
+      this.courtService
+        .reserveCourt(this.selectedDate, timeSlot, court.id)
+        .subscribe({
+          next: (success) => {
+            if (success) {
+              court.isVacant = false;
+              this.messageService.add({
+                severity: "success",
+                summary: "Reservation Successful",
+                detail: `${court.name} reserved for ${timeSlot}`,
+              });
+            } else {
+              this.messageService.add({
+                severity: "error",
+                summary: "Reservation Failed",
+                detail: "Unable to reserve the court.",
+              });
+            }
+          },
+          error: (error) => {
             this.messageService.add({
               severity: "error",
               summary: "Reservation Failed",
-              detail: "Unable to reserve the court.",
+              detail: "Unable to reserve the court. Please try again.",
             });
-          }
-        },
-        error: (error) => {
-          this.messageService.add({
-            severity: "error",
-            summary: "Reservation Failed",
-            detail: "Unable to reserve the court. Please try again.",
-          });
-        },
-      });
+          },
+        });
     }
   }
 
   vacateCourt(timeSlot: string, court: Court) {
-    if (this.courtService.isUsersCourt(timeSlot, court.id)) {
-      this.courtService.vacateCourt(timeSlot, court.id).subscribe({
-        next: (success) => {
-          if (success) {
-            court.isVacant = true;
-            this.messageService.add({
-              severity: "success",
-              summary: "Court Vacated",
-              detail: `${court.name} has been vacated`,
-            });
-          }
-        },
-      });
+    if (this.courtService.isUsersCourt(timeSlot, court.id, this.selectedDate)) {
+      this.courtService
+        .vacateCourt(timeSlot, court.id, this.selectedDate)
+        .subscribe({
+          next: (success) => {
+            if (success) {
+              court.isVacant = true;
+              this.messageService.add({
+                severity: "success",
+                summary: "Court Vacated",
+                detail: `${court.name} has been vacated`,
+              });
+            }
+          },
+        });
     }
   }
 
   isUsersCourt(timeSlot: string, court: Court): boolean {
-    return this.courtService.isUsersCourt(timeSlot, court.id);
+    return this.courtService.isUsersCourt(
+      timeSlot,
+      court.id,
+      this.selectedDate,
+    );
   }
 }

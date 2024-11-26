@@ -8,7 +8,7 @@ import { AuthService } from "./auth.service";
   providedIn: "root",
 })
 export class CourtService {
-  private mockTimeSlots: TimeSlot[] = this.generateTimeSlots();
+  private courtSchedules: Map<string, TimeSlot[]> = new Map();
   private maxReservationsPerUser = 2;
 
   constructor(
@@ -18,7 +18,7 @@ export class CourtService {
 
   private generateTimeSlots(): TimeSlot[] {
     const timeSlots: TimeSlot[] = [];
-    const numberOfCourts = Math.floor(Math.random() * (12 - 4 + 1)) + 4; // Generates a random number between 4 and 12
+    const numberOfCourts = Math.floor(Math.random() * (12 - 4 + 1)) + 4;
 
     for (let hour = 9; hour <= 21; hour++) {
       const time =
@@ -43,22 +43,32 @@ export class CourtService {
     return timeSlots;
   }
 
-  getTimeSlots(): Observable<TimeSlot[]> {
-    return of(this.mockTimeSlots);
+  getTimeSlots(date: Date): Observable<TimeSlot[]> {
+    const dateKey = this.formatDate(date);
+    if (!this.courtSchedules.has(dateKey)) {
+      this.courtSchedules.set(dateKey, this.generateTimeSlots());
+    }
+    return of(this.courtSchedules.get(dateKey) || []);
   }
 
-  reserveCourt(timeSlot: string, courtId: number): Observable<boolean> {
+  private formatDate(date: Date): string {
+    return date.toISOString().split("T")[0];
+  }
+
+  reserveCourt(
+    date: Date,
+    timeSlot: string,
+    courtId: number,
+  ): Observable<boolean> {
     const currentUser = this.authService.getCurrentUser();
+    const dateKey = this.formatDate(date);
 
     if (!currentUser) {
       return of(false);
     }
 
-    if (currentUser.reservations.length >= this.maxReservationsPerUser) {
-      return of(false);
-    }
-
     currentUser.reservations.push({
+      date: dateKey,
       timeSlot,
       courtId,
       timestamp: new Date(),
@@ -66,7 +76,8 @@ export class CourtService {
 
     localStorage.setItem("currentUser", JSON.stringify(currentUser));
 
-    const slot = this.mockTimeSlots.find((s) => s.time === timeSlot);
+    const slots = this.courtSchedules.get(dateKey);
+    const slot = slots?.find((s) => s.time === timeSlot);
     if (slot) {
       const court = slot.courts.find((c) => c.id === courtId);
       if (court) {
@@ -77,15 +88,21 @@ export class CourtService {
     return of(true);
   }
 
-  vacateCourt(timeSlot: string, courtId: number): Observable<boolean> {
+  vacateCourt(
+    timeSlot: string,
+    courtId: number,
+    date: Date,
+  ): Observable<boolean> {
     const currentUser = this.authService.getCurrentUser();
+    const dateKey = this.formatDate(date);
 
     if (!currentUser) {
       return of(false);
     }
 
     const reservationIndex = currentUser.reservations.findIndex(
-      (r) => r.timeSlot === timeSlot && r.courtId === courtId,
+      (r) =>
+        r.date === dateKey && r.timeSlot === timeSlot && r.courtId === courtId,
     );
 
     if (reservationIndex === -1) {
@@ -96,7 +113,8 @@ export class CourtService {
 
     localStorage.setItem("currentUser", JSON.stringify(currentUser));
 
-    const slot = this.mockTimeSlots.find((s) => s.time === timeSlot);
+    const slots = this.courtSchedules.get(dateKey);
+    const slot = slots?.find((s) => s.time === timeSlot);
     if (slot) {
       const court = slot.courts.find((c) => c.id === courtId);
       if (court) {
@@ -107,12 +125,14 @@ export class CourtService {
     return of(true);
   }
 
-  isUsersCourt(timeSlot: string, courtId: number): boolean {
+  isUsersCourt(timeSlot: string, courtId: number, date: Date): boolean {
     const currentUser = this.authService.getCurrentUser();
     if (!currentUser) return false;
 
+    const dateKey = this.formatDate(date);
     return currentUser.reservations.some(
-      (r) => r.timeSlot === timeSlot && r.courtId === courtId,
+      (r) =>
+        r.date === dateKey && r.timeSlot === timeSlot && r.courtId === courtId,
     );
   }
 
