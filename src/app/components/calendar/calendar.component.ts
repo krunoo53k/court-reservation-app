@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, Output, EventEmitter } from "@angular/core";
 import { FormsModule } from "@angular/forms";
 import { CalendarModule } from "primeng/calendar";
 
@@ -10,5 +10,11 @@ import { CalendarModule } from "primeng/calendar";
   styleUrl: "./calendar.component.css",
 })
 export class CalendarComponent {
-  date: Date | undefined;
+  date: Date = new Date();
+  minDate: Date = new Date();
+  @Output() dateChange = new EventEmitter<Date>();
+
+  onDateSelect(event: any) {
+    this.dateChange.emit(this.date);
+  }
 }
