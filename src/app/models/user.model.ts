@@ -5,6 +5,7 @@ export interface User {
 }
 
 export interface Reservation {
+  date: string;
   timeSlot: string;
   courtId: number;
   timestamp: Date;
