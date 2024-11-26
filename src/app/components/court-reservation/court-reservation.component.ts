@@ -6,14 +6,15 @@ import { MessageService } from "primeng/api";
 import { CourtService } from "../../services/court.service";
 import { TimeSlot, Court } from "../../models/court.model";
 import { AuthService } from "../../services/auth.service";
+import { CalendarComponent } from "../calendar/calendar.component";
 
 @Component({
   selector: "app-court-reservation",
   standalone: true,
-  imports: [CommonModule, ButtonModule, ToastModule], // Add ToastModule
+  imports: [CommonModule, ButtonModule, ToastModule, CalendarComponent],
   templateUrl: "./court-reservation.component.html",
   styleUrls: ["./court-reservation.component.css"],
-  providers: [MessageService], // Add MessageService to providers
+  providers: [MessageService],
 })
 export class CourtReservationComponent implements OnInit {
   timeSlots: TimeSlot[] = [];
