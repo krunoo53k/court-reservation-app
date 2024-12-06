@@ -6,7 +6,9 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "build:prod": "ng build --configuration production --base-href=/court-reservation-app/",
+    "deploy": "npx angular-cli-ghpages --dir=dist/klasije/browser"
   },
   "private": true,
   "dependencies": {
@@ -29,6 +31,7 @@
     "@angular/cli": "^18.2.12",
     "@angular/compiler-cli": "^18.2.0",
     "@types/jasmine": "~5.1.0",
+    "angular-cli-ghpages": "^2.0.3",
     "autoprefixer": "^10.4.20",
     "jasmine-core": "~5.2.0",
     "karma": "~6.4.0",
